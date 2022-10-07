@@ -8,14 +8,14 @@ public class TestBoardCell {
 	public TestBoardCell(int x, int y) {
 
 	}
-	void setRoom() {
+	public void setIsRoom(boolean a) {
 	}
 	boolean isRoom() {
 		return false;
 	}
 	void addAdjacency( TestBoardCell cell ) {
 	}
-	void setOccupied() {
+	public void setOccupied(boolean a) {
 	}
 	boolean getOccupied() {
 		return false;

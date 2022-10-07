@@ -7,9 +7,9 @@ public class TestBoard {
 	Set<TestBoardCell> legalCells;
 	public TestBoard() {
 	}
-	void calcTargets(TestBoardCell startCell, int pathlength) {
+	public void calcTargets(TestBoardCell startCell, int pathlength) {
 	}
-	Set<TestBoardCell> getTargets(){
+	public Set<TestBoardCell> getTargets(){
 		return new HashSet<TestBoardCell>();
 	}
 	public TestBoardCell getCell( int row, int col ) {
