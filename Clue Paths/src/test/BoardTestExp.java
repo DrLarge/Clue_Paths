@@ -1,5 +1,7 @@
 package test;
 
+import static org.junit.Assert.fail;
+
 import java.util.Set;
 
 import org.junit.Assert;
@@ -59,7 +61,7 @@ public class BoardTestExp {
 		Set<TestBoardCell> targets = board.getTargets();// getting the adjacency list of the cell
 
 		// making sure we have the right number of cells
-		Assert.assertEquals(6, targets.size());
+		Assert.assertEquals(3, targets.size());
 
 		// testing cells to make sure the right cells are in there
 		Assert.assertTrue(targets.contains(board.getCell(2, 0)));
@@ -102,7 +104,6 @@ public class BoardTestExp {
 		// testing cells to make sure the right cells are in there
 		Assert.assertTrue(targets.contains(board.getCell(0, 0)));
 		Assert.assertTrue(targets.contains(board.getCell(0, 2)));
-		Assert.assertTrue(targets.contains(board.getCell(0, 1)));
 		Assert.assertTrue(targets.contains(board.getCell(1, 1)));
 		Assert.assertTrue(targets.contains(board.getCell(1, 3)));
 		Assert.assertTrue(targets.contains(board.getCell(2, 0)));
@@ -118,7 +119,7 @@ public class BoardTestExp {
 		TestBoardCell cell = board.getCell(0,0);// the cell being tested
 		board.calcTargets(cell,5);// calculating possible moves for a roll of 5
 		Set<TestBoardCell> targets = board.getTargets();// getting the adjacency list of the cell
-		
+
 		// making sure we have the correct number of cells
 		Assert.assertEquals(8, targets.size());
 
@@ -141,14 +142,13 @@ public class BoardTestExp {
 		TestBoardCell cell = board.getCell(0,0);// the cell being tested
 		board.calcTargets(cell,6);// calculating possible moves for a roll of 6
 		Set<TestBoardCell> targets = board.getTargets();// getting the adjacency list of the cell
-		
+
 		// making sure we have the correct number of cells
-		Assert.assertEquals(16, targets.size());
+		Assert.assertEquals(9, targets.size());
 
 		// testing cells to make sure the right cells are in there
 		Assert.assertTrue(targets.contains(board.getCell(0, 0)));
 		Assert.assertTrue(targets.contains(board.getCell(0, 2)));
-		Assert.assertTrue(targets.contains(board.getCell(0, 1)));
 		Assert.assertTrue(targets.contains(board.getCell(1, 1)));
 		Assert.assertTrue(targets.contains(board.getCell(1, 3)));
 		Assert.assertTrue(targets.contains(board.getCell(2, 0)));
@@ -157,18 +157,54 @@ public class BoardTestExp {
 		Assert.assertTrue(targets.contains(board.getCell(3, 3)));
 	}
 
-	@Test
-	public void testTargetsMixed() {
-		board.getCell(0, 2).setOccupied(true);
-		board.getCell(0, 2).setIsRoom(true);
+	// Runs a variety of tests that examine different starting positions, and rooms being unavailable 
+	public void testMixed() {
+
+		board.getCell(0, 2).setOccupied(true);// making a cell occupied
+		board.getCell(0, 2).setIsRoom(true); // making a cell a room
+
+		// initializing objects
 		TestBoardCell cell = board.getCell(0,3);
 		board.calcTargets(cell,3);
 		Set<TestBoardCell> targets = board.getTargets();
-		Assert.assertEquals(3, targets.size());
+
+		// testing occupied condition
+		if(targets.size() != 3) {
+			fail("More cells than expected, testing ocuupied");
+		}
+
+		// testing all other possible cells
 		Assert.assertTrue(targets.contains(board.getCell(1, 2)));
 		Assert.assertTrue(targets.contains(board.getCell(2, 2)));
 		Assert.assertTrue(targets.contains(board.getCell(3, 3)));
-	}
 
+
+		TestBoardCell cell2 = board.getCell(2, 2);// new location
+
+		// resetting occupied
+		board.getCell(0, 2).setOccupied(false);
+		board.getCell(0, 2).setIsRoom(false);
+
+		// setting new occupied
+		board.getCell(2,1).setOccupied(true);
+		board.getCell(1,2).setIsRoom(true);
+
+		// new list
+		board.calcTargets(cell2,3);
+		Set<TestBoardCell> targets2 = board.getTargets();
+
+		// testing occupied condition
+		if(targets.size() != 5) {
+			fail("More cells than expected, testing occupied");
+		}
+
+		// testing all other possible cells
+		Assert.assertTrue(targets2.contains(board.getCell(1, 2)));
+		Assert.assertTrue(targets2.contains(board.getCell(2, 3)));
+		Assert.assertTrue(targets2.contains(board.getCell(3, 2)));
+		Assert.assertTrue(targets2.contains(board.getCell(3, 0)));
+		Assert.assertTrue(targets2.contains(board.getCell(0, 3)));
+
+	}
 
 }
